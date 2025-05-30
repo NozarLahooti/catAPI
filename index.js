@@ -1,4 +1,4 @@
-const { Carousel } = bootstrap
+const { Carousel } = bootstrap;
 
 // import axios from "axios";
 
@@ -12,7 +12,8 @@ const progressBar = document.getElementById("progressBar");
 const getFavouritesBtn = document.getElementById("getFavouritesBtn");
 
 // Step 0: Store your API key here for reference and easy access.
-const API_KEY = "live_tarWDGdbUihyeYet0DJIOUxVnsmnynR2GUQ3Jd6dlseIX26iy6dgbt0GIgM3cnzt";
+const API_KEY =
+  "live_tarWDGdbUihyeYet0DJIOUxVnsmnynR2GUQ3Jd6dlseIX26iy6dgbt0GIgM3cnzt";
 
 /**
  * 1. Create an async function "initialLoad" that does the following:
@@ -23,17 +24,26 @@ const API_KEY = "live_tarWDGdbUihyeYet0DJIOUxVnsmnynR2GUQ3Jd6dlseIX26iy6dgbt0GIg
  * This function should execute immediately.
  */
 
-  async function initialLoad () {
-    const response = await fetch(" https://api.thecatapi.com/v1/breeds") 
-    const breeds = await response.json()
-    breeds.forEach(breed => {
-      const option = document.createElement('option');
+// Retrieve a list of breeds
+
+async function initialLoad() {
+  try {
+    const response = await fetch("https://api.thecatapi.com/v1/breeds");
+    const breeds = await response.json();
+    console.log(breeds);
+
+    breeds.forEach((breed) => {
+      const option = document.createElement("option");
       option.value = breed.id;
       option.textContent = breed.name;
       breedSelect.appendChild(option);
-    })
+      console.log(breed.name);
+    });
+  } catch (error) {
+    console.log(error);
   }
-  initialLoad();
+}
+initialLoad();
 
 
 /**
@@ -51,21 +61,16 @@ const API_KEY = "live_tarWDGdbUihyeYet0DJIOUxVnsmnynR2GUQ3Jd6dlseIX26iy6dgbt0GIg
  * - Add a call to this function to the end of your initialLoad function above to create the initial carousel.
  */
 
-// Retrieve a list of breeds
-  async function breedChosen () {
-    
-    try{
-      const response = await fetch('https://api.thecatapi.com/v1/breeds')
-      const data = await response.json();
-      console.log(data)
-    }
-    catch(error) {
-      console.log(error);
-    }
-  }
-breedChosen()
+// Add event listener
 
+breedSelect.addEventListener('change', async function() {
+  const selectBreedId = this.value;
+  if (!selectBreedId) return;
 
+  const res = await fetch('https://api.thecatapi.com/v1/images/search?breed_ids=${selectedBreedId}&limit=5')
+  const data = await res.json();
+  console.log(data)
+})
 
 
 /**
