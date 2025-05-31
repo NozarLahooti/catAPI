@@ -45,7 +45,6 @@ async function initialLoad() {
 }
 initialLoad();
 
-
 /**
  * 2. Create an event handler for breedSelect that does the following:
  * - Retrieve information on the selected breed from the cat API using fetch().
@@ -63,15 +62,55 @@ initialLoad();
 
 // Add event listener
 
-breedSelect.addEventListener('change', async function() {
+breedSelect.addEventListener("change", async function () {
   const selectBreedId = this.value;
   if (!selectBreedId) return;
 
-  const res = await fetch('https://api.thecatapi.com/v1/images/search?breed_ids=${selectedBreedId}&limit=5')
-  const data = await res.json();
-  console.log(data)
-})
+  const carouselInner = document.querySelector(".carousel-inner");
+  const infoDump = document.getElementById("infoDump");
 
+  carouselInner.innerHTML = "";
+  infoDump.innerHTML = "";
+
+  const response = await fetch(
+    "https://api.thecatapi.com/v1/images/search?breed_ids=BREED_ID&limit=5"
+  );
+  const data = await response.json();
+
+  data.forEach((item, index) => {
+    const newDiv = document.createElement("div");
+    newDiv.className = "carousel-item";
+    if (index === 0) newDiv.classList.add("active");
+
+    const img = document.createElement("img");
+    img.src = item.url;
+    img.className = "d-block w-100";
+    img.alt = "Cat Image";
+
+    newDiv.appendChild(img);
+    carouselInner.appendChild(newDiv);
+  });
+
+  const breedInfo = data[0]?.breeds[0];
+
+  if (breedInfo) {
+    const name = document.createElement("h2");
+    name.textContent = breedInfo.name;
+    const description = document.createElement("p");
+    description.textContent = breedInfo.description;
+
+    const temperament = document.createElement("p");
+    temperament.innerHTML = `<strong>Temperament:</strong> ${breedInfo.temperament}`;
+
+    infoDump.appendChild(name);
+    infoDump.appendChild(description);
+    infoDump.appendChild(temperament);
+  }
+
+  const carouselElement = document.querySelector("#carouselExampleControls");
+  const carousel = new bootstrap.Carousel(carouselElement);
+  carousel.cycle();
+});
 
 /**
  * 3. Fork your own sandbox, creating a new one named "JavaScript Axios Lab."
@@ -91,6 +130,15 @@ breedSelect.addEventListener('change', async function() {
  * - Add a console.log statement to indicate when requests begin.
  * - As an added challenge, try to do this on your own without referencing the lesson material.
  */
+
+
+
+
+
+
+
+
+
 
 /**
  * 6. Next, we'll create a progress bar to indicate the request is in progress.
