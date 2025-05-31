@@ -73,7 +73,7 @@ breedSelect.addEventListener("change", async function () {
   infoDump.innerHTML = "";
 
   const response = await fetch(
-    "https://api.thecatapi.com/v1/images/search?breed_ids=BREED_ID&limit=5"
+    `https://api.thecatapi.com/v1/images/search?breed_ids=${selectBreedId}&limit=5`
   );
   const data = await response.json();
 
@@ -130,14 +130,6 @@ breedSelect.addEventListener("change", async function () {
  * - Add a console.log statement to indicate when requests begin.
  * - As an added challenge, try to do this on your own without referencing the lesson material.
  */
-
-
-
-
-
-
-
-
 
 
 /**
