@@ -3,13 +3,15 @@ import axios from "axios";
 const API_KEY =
   "live_tarWDGdbUihyeYet0DJIOUxVnsmnynR2GUQ3Jd6dlseIX26iy6dgbt0GIgM3cnzt";
 
+// Add Interceptors
+axios.interceptors.request.use(config => {
+    config.headers['api-key'] = API_KEY;
+    return config;
+});
+
 async function loadBreeds() {
   try {
-    const response = await axios.get("https://api.thecatapi.com/v1/breeds", {
-      headers: {
-        "x-api-key": API_KEY,
-      },
-    });
+    const response = await axios.get("https://api.thecatapi.com/v1/breeds");
 
     const breedSelect = document.getElementById("breedSelect");
     response.data.forEach((breed) => {
@@ -30,13 +32,7 @@ document.getElementById("breedSelect").addEventListener("change", async () => {
 
   try {
     const response = await axios.get(
-      `https://api.thecatapi.com/v1/images/search?breed_ids=${selectBreedId}&limit=5`,
-      {
-        headers: {
-          "x-api-key": API_KEY,
-        },
-      }
-    );
+      `https://api.thecatapi.com/v1/images/search?breed_ids=${selectBreedId}&limit=5`);
 
     const data = response.data;
 
@@ -58,3 +54,7 @@ document.getElementById("breedSelect").addEventListener("change", async () => {
 });
 
 loadBreeds();
+
+
+
+
